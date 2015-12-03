@@ -51,16 +51,6 @@ class Touchable extends React.Component {
     style: styles.initial
   }
 
-  _getChildren() {
-    const { activeOpacity, children } = this.props
-    return React.cloneElement(React.Children.only(children), {
-      style: {
-        ...children.props.style,
-        ...(this.state.isActive && { opacity: activeOpacity })
-      }
-    })
-  }
-
   _onKeyEnter(e, callback) {
     var ENTER = 13
     if (e.keyCode === ENTER) {
@@ -107,7 +97,7 @@ class Touchable extends React.Component {
         accessibilityLabel={accessibilityLabel}
         accessibilityRole={accessibilityRole}
         accessible={accessible}
-        children={this._getChildren()}
+        children={this.props.children}
         component={View}
         onKeyDown={(e) => { this._onKeyEnter(e, this._onPressIn) }}
         onKeyPress={this._onPress}
@@ -122,8 +112,7 @@ class Touchable extends React.Component {
         pressMoveThreshold={5}
         style={{
           ...styles.initial,
-          ...style,
-          backgroundColor: this.state.isActive ? activeUnderlayColor : style.backgroundColor
+          ...StyleSheet.merge(style)
         }}
         tabIndex='0'
       />

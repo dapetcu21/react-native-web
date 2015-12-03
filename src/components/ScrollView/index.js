@@ -30,7 +30,10 @@ class ScrollView extends React.Component {
     onScroll: PropTypes.func,
     scrollEnabled: PropTypes.bool,
     scrollEventThrottle: PropTypes.number,
-    style: PropTypes.shape(ScrollViewStylePropTypes)
+    style: PropTypes.oneOfType([
+      PropTypes.object,
+      PropTypes.array
+    ])
   }
 
   static defaultProps = {
@@ -108,8 +111,8 @@ class ScrollView extends React.Component {
       style
     } = this.props
 
-    const resolvedStyle = pickProps(style, scrollViewStyleKeys)
-    const resolvedContentContainerStyle = pickProps(contentContainerStyle, scrollViewStyleKeys)
+    const resolvedStyle = style // pickProps(style, scrollViewStyleKeys)
+    const resolvedContentContainerStyle = contentContainerStyle // pickProps(contentContainerStyle, scrollViewStyleKeys)
 
     return (
       <View
@@ -117,19 +120,19 @@ class ScrollView extends React.Component {
         onScroll={(e) => this._onScroll(e)}
         onTouchMove={(e) => this._maybePreventScroll(e)}
         onWheel={(e) => this._maybePreventScroll(e)}
-        style={{
-          ...styles.initial,
-          ...resolvedStyle
-        }}
+        style={[
+          styles.initial,
+          resolvedStyle
+        ]}
       >
         {children ? (
           <View
             children={children}
-            style={{
-              ...styles.initialContentContainer,
-              ...resolvedContentContainerStyle,
-              ...(horizontal && styles.row)
-            }}
+            style={[
+              styles.initialContentContainer,
+              resolvedContentContainerStyle,
+              (horizontal && styles.row)
+            ]}
           />
         ) : null}
       </View>

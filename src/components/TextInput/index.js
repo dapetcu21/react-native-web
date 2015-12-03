@@ -43,7 +43,10 @@ class TextInput extends React.Component {
     placeholderTextColor: PropTypes.string,
     secureTextEntry: PropTypes.bool,
     selectTextOnFocus: PropTypes.bool,
-    style: PropTypes.shape(TextInputStylePropTypes),
+    style: PropTypes.oneOfType([
+      PropTypes.object,
+      PropTypes.array
+    ]),
     testID: CoreComponent.propTypes.testID,
     value: PropTypes.string
   }
@@ -113,7 +116,7 @@ class TextInput extends React.Component {
       value
     } = this.props
 
-    const resolvedStyle = pickProps(style, textInputStyleKeys)
+    const resolvedStyle = style // pickProps(style, textInputStyleKeys)
     let type
 
     switch (keyboardType) {
@@ -148,10 +151,10 @@ class TextInput extends React.Component {
       onSelect: onSelectionChange && this._onSelectionChange.bind(this),
       placeholder,
       readOnly: !editable,
-      style: {
-        ...styles.initial,
-        ...resolvedStyle
-      },
+      style: [
+        styles.initial,
+        resolvedStyle
+      ],
       testID,
       value
     }

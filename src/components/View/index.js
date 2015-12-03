@@ -39,7 +39,10 @@ class View extends React.Component {
     accessible: CoreComponent.propTypes.accessible,
     children: PropTypes.any,
     pointerEvents: PropTypes.oneOf(['auto', 'box-none', 'box-only', 'none']),
-    style: PropTypes.shape(ViewStylePropTypes),
+    style: PropTypes.oneOfType([
+      PropTypes.object,
+      PropTypes.array
+    ]),
     testID: CoreComponent.propTypes.testID
   }
 
@@ -61,17 +64,13 @@ class View extends React.Component {
 
     const className = `View ${_className}`.trim()
     const pointerEventsStyle = pointerEvents && { pointerEvents }
-    const resolvedStyle = pickProps(style, viewStyleKeys)
+    // const resolvedStyle = pickProps(style, viewStyleKeys)
 
     return (
       <CoreComponent
         {...other}
         className={className}
-        style={{
-          ...styles.initial,
-          ...resolvedStyle,
-          ...pointerEventsStyle
-        }}
+        style={[ styles.initial, style, pointerEventsStyle ]}
       />
     )
   }

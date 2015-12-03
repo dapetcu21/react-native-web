@@ -33,7 +33,10 @@ class Text extends React.Component {
     children: PropTypes.any,
     numberOfLines: PropTypes.number,
     onPress: PropTypes.func,
-    style: PropTypes.shape(TextStylePropTypes),
+    style: PropTypes.oneOfType([
+      PropTypes.object,
+      PropTypes.array
+    ]),
     testID: CoreComponent.propTypes.testID
   }
 
@@ -59,7 +62,7 @@ class Text extends React.Component {
     } = this.props
 
     const className = `Text ${_className}`.trim()
-    const resolvedStyle = pickProps(style, textStyleKeys)
+    const resolvedStyle = style // pickProps(style, textStyleKeys)
 
     return (
       <CoreComponent
@@ -67,11 +70,11 @@ class Text extends React.Component {
         className={className}
         component='span'
         onClick={this._onPress.bind(this)}
-        style={{
-          ...styles.initial,
-          ...resolvedStyle,
-          ...(numberOfLines === 1 && styles.singleLineStyle)
-        }}
+        style={[
+          styles.initial,
+          resolvedStyle,
+          (numberOfLines === 1 && styles.singleLineStyle)
+        ]}
       />
     )
   }

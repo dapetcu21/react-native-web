@@ -27,7 +27,10 @@ class CoreComponent extends React.Component {
       PropTypes.func,
       PropTypes.string
     ]),
-    style: PropTypes.object,
+    style: PropTypes.oneOfType([
+      PropTypes.object,
+      PropTypes.array
+    ]),
     testID: PropTypes.string,
     type: PropTypes.string
   }

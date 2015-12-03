@@ -74,7 +74,10 @@ class Image extends React.Component {
     onLoadStart: PropTypes.func,
     resizeMode: PropTypes.oneOf(['contain', 'cover', 'none', 'stretch']),
     source: PropTypes.object,
-    style: PropTypes.shape(ImageStylePropTypes),
+    style: PropTypes.oneOfType([
+      PropTypes.object,
+      PropTypes.array
+    ]),
     testID: CoreComponent.propTypes.testID
   }
 
@@ -177,7 +180,7 @@ class Image extends React.Component {
     const isLoaded = this.state.status === STATUS_LOADED
     const defaultImage = defaultSource.uri || null
     const displayImage = !isLoaded ? defaultImage : source.uri
-    const resolvedStyle = pickProps(style, imageStyleKeys)
+    const resolvedStyle = style // pickProps(style, imageStyleKeys)
     const backgroundImage = displayImage ? `url("${displayImage}")` : null
 
     /**
@@ -193,12 +196,12 @@ class Image extends React.Component {
         accessibilityLabel={accessibilityLabel}
         accessibilityRole='img'
         accessible={accessible}
-        style={{
-          ...styles.initial,
-          ...resolvedStyle,
-          ...(backgroundImage && { backgroundImage }),
-          ...styles.resizeMode[resizeMode]
-        }}
+        style={[
+          styles.initial,
+          resolvedStyle,
+          (backgroundImage && { backgroundImage }),
+          styles.resizeMode[resizeMode]
+        ]}
         testID={testID}
       >
         <img
